@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap SYSTEM "http://www.ibatis.com/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ve">
+
+	<typeAlias alias="emp" type="vo.Emp"/>
+	<typeAlias alias="dept" type="vo.Dept"/>
+	<typeAlias alias="hist" type="vo.History"/>
+	
+	<select id="finddeptbyid" resultClass="dept" parameterClass="int">
+		select * from dept where did=#value#
+	</select>
+	<resultMap class="emp" id="empdept">
+		<result property="eid" column="eid"/>
+		<result property="ename" column="ename"/>
+		<result property="sex" column="sex"/>
+		<result property="hire" column="hire"/>
+		<result property="sar" column="sar"/>
+		<result property="did" column="did"/>
+		<result property="dept" column="did" select="ve.finddeptbyid"/>
+	</resultMap>
+	<select id="allemp" resultMap="empdept" parameterClass="emp">
+		select * from emp
+	</select>
+	
+	<!-- 添加员工前查询所有部门 -->
+	<select id="alldept" parameterClass="dept" resultClass="dept">
+		select * from dept
+	</select>
+	
+	<!-- 添加员工 -->
+	<insert id="addemp" parameterClass="emp">
+		insert into emp values(#ename#,#sex#,#hire#,#sar#,#did#)
+		<selectKey keyProperty="eid" resultClass="int">
+			select @@IDENTITY
+		</selectKey>
+	</insert>
+	<!-- 修改员工 -->
+	<update id="updateemp" parameterClass="emp">
+		update emp set ename=#ename#,sex=#sex#,hire=#hire#,sar=#sar#,did=#did# where eid=#eid#
+	</update>
+	
+	<!-- 添加工作经历 -->
+	<insert id="addhistory" parameterClass="hist">
+		insert into history values(#startdate#,#enddate#,#place#,#job#,#eid#)
+	</insert>
+	<!-- 修改工作经历 -->
+	<update id="updatehist" parameterClass="hist">
+		update history set startdate=#startdate#,enddate=#enddate#,place=#place#,job=#job# where hid=#hid#
+	</update>
+	<!-- 根据主键删除工作经历 -->
+	<delete id="delhistbyhid" parameterClass="int">
+		delete history where hid=#value#
+	</delete>
+	<!-- 根据外键删除工作经历 -->
+	<delete id="delhistbyeid" parameterClass="int">
+		delete history where eid=#value#
+	</delete>
+	
+	<!-- 删除员工 -->
+	<delete id="delemp" parameterClass="int">
+		delete emp where eid=#value#
+	</delete>
+	
+	<!-- 根据主键查询员工 -->
+	<select id="findempbyeid" parameterClass="int" resultClass="emp">
+		select * from emp where eid=#value#
+	</select>
+	
+	<!-- 根据外键查询工作经历 -->
+	<select id="findhistbyeid" parameterClass="int" resultClass="hist">
+		select * from history where eid=#value#
+	</select>
+	
+	<!-- 多条件模糊查询 -->
+	<select id="findemp" parameterClass="emp" resultMap="empdept">
+		select * from emp
+		<dynamic prepend="where">
+			<isNotNull property="ename" prepend="and">
+				ename like '%$ename$%'
+			</isNotNull>
+			<isNotEqual property="sex" compareValue="k" prepend="and">
+				sex=#sex#
+			</isNotEqual>
+			<isNotEqual property="did" compareValue="0" prepend="and">
+				did=#did#
+			</isNotEqual>
+			<isNotEmpty property="hire" prepend="and">
+				hire >=#hire#
+			</isNotEmpty>
+			<isNotEmpty property="hire2" prepend="and">
+				hire &lt;=#hire2#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+</sqlMap>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 注入的数据源对象 -->
+	<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="jdbc:sqlserver://localhost:1433;SelectMethod=Cursor;databaseName=test"/>
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+		<property name="username" value="sa"/>
+		<property name="password" value="sasa"/>
+	</bean>
+	
+	<!-- 生产SqlMapClient的工厂 -->
+	<bean id="fac" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="dataSource">
+			<ref bean="ds"/>
+		</property>		
+		<property name="configLocation" value="/WEB-INF/classes/sqlMapConfig.xml"/>
+	</bean>
+	
+	<!-- 接收请求 -->
+	<bean id="urls" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="emp.sw">empcont</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 响应请求 -->
+	<bean id="views" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	
+	<!-- 以下两项根据实际情况注入 -->
+	<bean id="dao" class="dao.EmpDao">
+		<property name="sqlMapClient">
+			<ref bean="fac"/>
+		</property>
+	</bean>
+	
+	<bean id="empcont" class="cont.EmpController">
+		<property name="dao">
+			<ref bean="dao"/>
+		</property>
+	</bean>
+</beans>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap SYSTEM "http://www.ibatis.com/dtd/sql-map-2.dtd" >
+<sqlMap namespace="vd">
+
+	<typeAlias alias="dept" type="vo.Dept"/>
+	
+	<select id="findempsbydid" resultClass="emp" parameterClass="int">
+		select * from emp where did=#value#
+	</select>
+	<resultMap id="deptemps" class="dept">
+		<result property="did" column="did"/>
+		<result property="dname" column="dname"/>
+		<result property="man" column="man"/>
+		<result property="tel" column="tel"/>
+		<result property="updept" column="updept"/>
+		<result property="emps" column="did" select="vd.findempsbydid"/>
+	</resultMap>
+	<select id="alldept" resultMap="deptemps" parameterClass="dept">
+		select * from dept
+	</select>
+	
+	<select id="alldept2" resultClass="dept" parameterClass="dept">
+		select * from dept
+	</select>
+	
+</sqlMap>

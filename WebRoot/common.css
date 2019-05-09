@@ -1,0 +1,37 @@
+body{
+	font-size:11pt;
+}
+table{
+	font-size:11pt;
+	border:0px;
+	background-color:#666666;
+}
+th{
+	height:35px;
+	color:#383431;
+	background-color:#CCC9C9;
+}
+tr{
+	height:30px;
+	background-color:white;
+	text-align:center;
+}
+td{
+	text-align:center;	
+}
+input{
+	border:1px #666666 solid;
+	height:23px;
+}
+.nob{
+	border:0px;	
+}
+textarea{
+	border:1px #666666 solid;
+}
+.left{
+	text-align:left;
+}
+.right{
+	text-align:right;
+}
