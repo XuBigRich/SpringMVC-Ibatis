@@ -69,5 +69,6 @@
     </orderEntry>
     <orderEntry type="library" name="melibrary.com.genuitec.eclipse.lib.spring3.MYECLIPSE_SPRING30_CORE" level="application" />
     <orderEntry type="library" name="melibrary.com.genuitec.eclipse.lib.spring3.MYECLIPSE_SPRING30_WEB" level="application" />
+    <orderEntry type="library" name="ibatis-2.3.4.726" level="project" />
   </component>
 </module>
